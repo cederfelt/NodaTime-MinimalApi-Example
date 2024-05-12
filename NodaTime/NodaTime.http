@@ -1,0 +1,22 @@
+@NodaTime_HostAddress = http://localhost:5012
+
+GET {{NodaTime_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
+
+GET {{NodaTime_HostAddress}}/getutc/
+Accept: application/json
+
+###
+
+GET {{NodaTime_HostAddress}}/getlocal/
+Accept: application/json
+
+###
+
+
+GET {{NodaTime_HostAddress}}/getinstant/
+Accept: application/json
+
+###
