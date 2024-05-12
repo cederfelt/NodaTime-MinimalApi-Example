@@ -8,6 +8,8 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
+
+//To get correct swagger types, format and examples.
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "NodaTime.Api", Version = "v1" });
@@ -25,7 +27,6 @@ builder.Services.Configure<Microsoft.AspNetCore.Http.Json.JsonOptions>(options =
     options.SerializerOptions.PropertyNamingPolicy = null;
     options.SerializerOptions.WriteIndented = true;
     options.SerializerOptions.ConfigureForNodaTime(DateTimeZoneProviders.Tzdb);
-    options.SerializerOptions.Converters.Add(NodaConverters.LocalDateTimeConverter);
 });
 var app = builder.Build();
 

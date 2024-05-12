@@ -1,6 +1,10 @@
 ﻿using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.OpenApi.Any;
+using Microsoft.OpenApi.Models;
+using NodaTime.Serialization.SystemTextJson;
 using NodaTime.Text;
+using System.ComponentModel;
 
 namespace NodaTime.Api
 {
@@ -10,9 +14,20 @@ namespace NodaTime.Api
         {
             group.MapGet("/UnixToUtc/{unix}", UnixToUtc).WithDisplayName("UnixToUtc");
             group.MapGet("/UnixToLocal/{unix}", UnixToLocal).WithDisplayName("UnixToLocal");
-            group.MapGet("/addDayToLocal/{localString}", addDayToLocal).WithDisplayName("addDayToLocal");
+            group.MapGet("/AddDayToDateOnly/{local}", AddDayToDateOnly).WithDisplayName("AddDayToDateOnly");
+            group.MapGet("/addDayToLocal/{localString}", addDayToLocal).WithDisplayName("addDayToLocal").WithOpenApi(x =>
+            {
+                x.Parameters[0].Schema = new OpenApiSchema { Type = "string", Format = "date", Example = new OpenApiString("2024-05-11") };
+                return x;
+            });
 
             return group;
+        }
+
+        //does not work
+        public static Ok<LocalDate> AddDayToDateOnly([TypeConverter(typeof(NodaConverters))][FromRoute] LocalDate local, IClock clock)
+        {
+            return TypedResults.Ok(local.PlusDays(1));
         }
 
         public static Ok<LocalDate> addDayToLocal([FromRoute] string localString, IClock clock)
